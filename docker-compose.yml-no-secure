@@ -1,0 +1,17 @@
+services:
+  jenkins:
+    image: jenkins/jenkins:lts
+    container_name: jenkins
+    environment:
+      - TZ=Asia/Karachi
+    volumes:
+      - ./jenkins_home:/var/jenkins_home
+    ports:
+      - 8080:8080
+    networks:
+      - jenkinsnetwork
+
+networks:
+  jenkinsnetwork:
+    driver: bridge
+
