@@ -1,4 +1,4 @@
-keytool -genkey -keyalg RSA -alias *.dev-appcentre.faysalbank.com -keystore jenkins.keystore -storepass fbl2021 -validity 365 -keysize 2048
+keytool -genkey -keyalg RSA -alias *.dev-jenkinstest.com -keystore jenkins.keystore -storepass jenkins123 -validity 365 -keysize 2048
 
 docker exec -it jenkins cat /var/jenkins_home/secrets/initialAdminPassword
 
