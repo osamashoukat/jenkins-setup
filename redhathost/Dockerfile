@@ -1,24 +1,40 @@
 FROM redhat/ubi9:latest
 
-MAINTAINER "Osama Shoukat"
-# Openssh-server or client
-RUN dnf -y install openssh-server
+LABEL maintainer="Osama Shoukat"
 
-# new user create and set proper password for user
-# create user home directory with proper permissions
+# Set timezone (optional)
+ENV TZ=Asia/Karachi
+
+# Install base tools without requiring subscription
+RUN dnf -y install openssh-server
+RUN dnf -y install mysql 
+RUN dnf -y install https://dl.fedoraproject.org/pub/epel/epel-release-latest-9.noarch.rpm
+RUN dnf -y install python3-pip
+RUN dnf clean all
+
+# Upgrade pip and install awscli
+RUN pip3 install --upgrade pip && \
+    pip3 install awscli
+
+# Create remote user with password
 RUN useradd remote_user && \
-    echo "1234" | passwd remote_user --stdin && \
-    mkdir /home/remote_user/.ssh
- 
-# copy remote key from host machine to this container
+    echo "remote_user:1234" | chpasswd && \
+    mkdir -p /home/remote_user/.ssh
+
+# Add public SSH key for remote access
 COPY remote-key.pub /home/remote_user/.ssh/authorized_keys
+
+# Set proper permissions
 RUN chown -R remote_user:remote_user /home/remote_user && \
+    chmod 700 /home/remote_user/.ssh && \
     chmod 400 /home/remote_user/.ssh/authorized_keys
 
+# Generate SSH host keys
 RUN ssh-keygen -A
 
+# Expose SSH port
 EXPOSE 22
 
-CMD /usr/sbin/sshd -D
-
+# Run SSH daemon
+CMD ["/usr/sbin/sshd", "-D"]
 

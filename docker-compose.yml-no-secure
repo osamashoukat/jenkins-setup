@@ -14,11 +14,23 @@ services:
 
   remote_host:
     build:
-      context: redhathost
+      context: ./redhathost
     image: remote-host:rhel9
     container_name: remote_host
     environment:
       - TZ=Asia/Karachi
+    restart: always
+    networks:
+      - jenkinsnetwork
+
+  db_host:
+    image: mysql:5.7
+    container_name: db
+    environment:
+      - TZ=Asia/Karachi
+      - MYSQL_ROOT_PASSWORD=1234
+    volumes:
+      - ./db_data:/var/lib/mysql
     networks:
       - jenkinsnetwork
     restart: always
@@ -26,4 +38,3 @@ services:
 networks:
   jenkinsnetwork:
     driver: bridge
-
