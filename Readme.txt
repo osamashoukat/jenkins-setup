@@ -2,4 +2,8 @@ keytool -genkey -keyalg RSA -alias *.dev-jenkinstest.com -keystore jenkins.keyst
 
 docker exec -it jenkins cat /var/jenkins_home/secrets/initialAdminPassword
 
-b59a4ef2819f44199fa7631da4b783f4
+3608cab73db24c0199ef559e2f9fb558
+
+jenkins.admin
+Jenkins User ID: jenkinsadmin123
+Password: jenkins@1234

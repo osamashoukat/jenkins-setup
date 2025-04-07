@@ -7,9 +7,21 @@ services:
     volumes:
       - ./jenkins_home:/var/jenkins_home
     ports:
-      - 8080:8080
+      - "8081:8080"
+    restart: always
     networks:
       - jenkinsnetwork
+
+  remote_host:
+    build:
+      context: redhathost
+    image: remote-host:rhel9
+    container_name: remote_host
+    environment:
+      - TZ=Asia/Karachi
+    networks:
+      - jenkinsnetwork
+    restart: always
 
 networks:
   jenkinsnetwork:
